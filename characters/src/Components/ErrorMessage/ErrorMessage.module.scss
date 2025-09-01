@@ -1,0 +1,127 @@
+.errorContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  padding-inline: var(--spacing-md);
+}
+
+.errorContent {
+  text-align: center;
+  max-width: 500px;
+  background-color: var(--surface-color);
+  padding-block: var(--spacing-xl);
+  padding-inline: var(--spacing-lg);
+  border-radius: var(--border-radius);
+  border: 1px solid #2a2d3a;
+}
+
+.errorIcon {
+  font-size: 3rem;
+  margin-block-end: var(--spacing-md);
+}
+
+.errorTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-block-end: var(--spacing-md);
+  color: var(--text-primary);
+}
+
+.errorMessage {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-block-end: var(--spacing-lg);
+}
+
+.retryButton {
+  padding-inline: var(--spacing-lg);
+  padding-block: var(--spacing-sm);
+  font-weight: 500;
+}
+
+.errorDetails {
+  margin-block-start: var(--spacing-lg);
+  text-align: start;
+}
+
+.errorDetails summary {
+  color: var(--text-secondary);
+  cursor: pointer;
+  margin-block-end: var(--spacing-sm);
+  font-size: 0.9rem;
+}
+
+.errorDetailsContent {
+  background-color: var(--background-color);
+  color: var(--text-secondary);
+  padding-block: var(--spacing-md);
+  padding-inline: var(--spacing-md);
+  border-radius: var(--border-radius);
+  overflow-x: auto;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+/* Type-specific styles */
+.error .errorContent {
+  border-color: var(--error-color);
+}
+
+.error .errorTitle {
+  color: var(--error-color);
+}
+
+.warning .errorContent {
+  border-color: var(--warning-color);
+}
+
+.warning .errorTitle {
+  color: var(--warning-color);
+}
+
+.info .errorContent {
+  border-color: var(--primary-color);
+}
+
+.info .errorTitle {
+  color: var(--primary-color);
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .errorContainer {
+    min-height: 250px;
+  }
+
+  .errorContent {
+    padding-block: var(--spacing-lg);
+    padding-inline: var(--spacing-md);
+  }
+
+  .errorTitle {
+    font-size: 1.25rem;
+  }
+
+  .errorMessage {
+    font-size: 0.9rem;
+  }
+
+  .errorIcon {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .errorTitle {
+    font-size: 1.1rem;
+  }
+
+  .errorIcon {
+    font-size: 2rem;
+  }
+}

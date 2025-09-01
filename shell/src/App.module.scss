@@ -1,0 +1,17 @@
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.mainContent {
+  flex: 1;
+  padding-block: var(--spacing-lg);
+  padding-inline: 0;
+}
+
+@media (max-width: 768px) {
+  .mainContent {
+    padding-block: var(--spacing-md);
+  }
+}

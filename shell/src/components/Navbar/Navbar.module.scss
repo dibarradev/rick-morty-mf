@@ -1,0 +1,61 @@
+.navbar {
+  background-color: var(--surface-color) !important;
+  border-bottom: 1px solid #2a2d3a;
+  padding-block: var(--spacing-sm);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.brand {
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: var(--primary-color) !important;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.brand:hover {
+  color: #0097a7 !important;
+}
+
+.logo {
+  height: 40px;
+  width: auto;
+}
+
+.fallbackText {
+  color: var(--primary-color);
+  font-weight: bold;
+}
+
+.nav-link {
+  color: var(--text-secondary) !important;
+  font-weight: 500;
+  padding-inline: var(--spacing-md) !important;
+  padding-block: var(--spacing-sm) !important;
+  border-radius: var(--border-radius);
+  transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+  color: var(--primary-color) !important;
+  background-color: rgba(0, 188, 212, 0.1);
+}
+
+.nav-link.active {
+  color: var(--primary-color) !important;
+  background-color: rgba(0, 188, 212, 0.15);
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 991.98px) {
+  .navbar-nav {
+    margin-block-start: var(--spacing-sm);
+    text-align: center;
+  }
+
+  .nav-link {
+    margin-block: var(--spacing-xs);
+  }
+}

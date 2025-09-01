@@ -1,0 +1,153 @@
+.paginationNav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.pagination {
+  margin: 0;
+  justify-content: center;
+}
+
+.pageButton {
+  &.disabled {
+    span {
+      pointer-events: none;
+      padding-inline: 1rem;
+      background-color: transparent !important;
+    }
+  }
+}
+
+.pageLink {
+  background-color: var(--surface-color);
+  border: 1px solid #2a2d3a;
+  color: var(--text-primary);
+  padding-inline: var(--spacing-md);
+  padding-block: var(--spacing-sm);
+  margin-inline: 6px;
+  border-radius: var(--border-radius);
+  font-size: 0.9rem;
+  font-weight: 500;
+  min-width: 30px;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.pageLink:hover:not(:disabled) {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 188, 212, 0.3);
+}
+
+.pageLink:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+  z-index: 2;
+}
+
+.pageLink:disabled {
+  background-color: var(--surface-color);
+  border-color: #2a2d3a;
+  color: var(--text-secondary);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.pageLink.active {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: white;
+  cursor: default;
+  font-weight: 600;
+}
+
+.ellipsis {
+  background-color: transparent;
+  border: 1px solid transparent;
+  color: var(--text-secondary);
+  cursor: default;
+  padding-inline: var(--spacing-sm);
+  padding-block: var(--spacing-sm);
+}
+
+.pageInfo {
+  text-align: center;
+}
+
+.pageInfoText {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .paginationNav {
+    gap: var(--spacing-sm);
+  }
+
+  .pageLink {
+    padding-inline: var(--spacing-sm);
+    padding-block: var(--spacing-xs);
+    font-size: 0.85rem;
+    margin-inline: 12px;
+  }
+
+  .pagination {
+    flex-wrap: wrap;
+  }
+
+  .pageInfoText {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .pageLink {
+    padding-inline: var(--spacing-xs);
+    margin-inline: 1rem;
+  }
+
+  /* Hide some page numbers on very small screens */
+  .pagination .page-item:nth-child(n + 6):nth-last-child(n + 6) {
+    display: none;
+  }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .pageLink {
+    transition: none;
+  }
+
+  .pageLink:hover:not(:disabled) {
+    transform: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .pageLink {
+    border: 2px solid var(--text-primary);
+  }
+
+  .pageLink.active {
+    border: 2px solid var(--primary-color);
+  }
+
+  .pageLink:disabled {
+    border: 2px solid var(--text-secondary);
+  }
+}
+
+/* Large screens optimization */
+@media (min-width: 1200px) {
+  .pageLink {
+    padding-inline: var(--spacing-lg);
+    font-size: 1rem;
+  }
+}

@@ -1,0 +1,28 @@
+services:
+  shell:
+    build:
+      context: ./shell
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - characters
+    networks:
+      - microfrontend-network
+
+  characters:
+    build:
+      context: ./characters
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+    networks:
+      - microfrontend-network
+
+networks:
+  microfrontend-network:
+    driver: bridge

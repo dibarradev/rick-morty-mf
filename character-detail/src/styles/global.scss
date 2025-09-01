@@ -1,0 +1,81 @@
+/* Global styles for the character-detail microfrontend */
+:root {
+  --primary-color: #00bcd4;
+  --secondary-color: #ff5722;
+  --background-color: #0a0e1a;
+  --surface-color: #1a1d29;
+  --text-primary: #ffffff;
+  --text-secondary: #b3b3b3;
+  --success-color: #4caf50;
+  --warning-color: #ff9800;
+  --error-color: #f44336;
+  --border-radius: 8px;
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-primary);
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+    "Helvetica Neue", sans-serif;
+}
+
+/* Bootstrap overrides for dark theme */
+.card {
+  background-color: var(--surface-color);
+  border: 1px solid #2a2d3a;
+  color: var(--text-primary);
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+  background-color: #0097a7;
+  border-color: #0097a7;
+}
+
+.btn-outline-primary {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: white;
+}
+
+.list-group-item {
+  background-color: var(--surface-color);
+  border-color: #2a2d3a;
+  color: var(--text-primary);
+}
+
+.list-group-item:hover {
+  background-color: rgba(0, 188, 212, 0.1);
+}
+
+.badge {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.bg-success {
+  background-color: var(--success-color) !important;
+}
+
+.bg-danger {
+  background-color: var(--error-color) !important;
+}
+
+.bg-secondary {
+  background-color: #6c757d !important;
+}

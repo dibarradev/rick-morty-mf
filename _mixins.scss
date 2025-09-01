@@ -1,0 +1,247 @@
+@use "sass:color";
+@use "_variables" as *;
+
+// Mixins for Rick & Morty Project
+// ================================
+
+// Responsive breakpoints
+@mixin mobile {
+  @media (max-width: #{$breakpoint-sm - 1px}) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: #{$breakpoint-sm}) and (max-width: #{$breakpoint-lg - 1px}) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: #{$breakpoint-lg}) {
+    @content;
+  }
+}
+
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == "mobile" {
+    @include mobile {
+      @content;
+    }
+  }
+  @if $breakpoint == "tablet" {
+    @include tablet {
+      @content;
+    }
+  }
+  @if $breakpoint == "desktop" {
+    @include desktop {
+      @content;
+    }
+  }
+}
+
+// Flexbox utilities
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin flex-column-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+// Grid utilities
+@mixin grid-responsive($min-width: 250px, $gap: $space-4) {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax($min-width, 1fr));
+  gap: $gap;
+}
+
+// Card component
+@mixin card($padding: $card-padding, $radius: $border-radius-lg, $shadow: $shadow-md) {
+  background: $white;
+  padding: $padding;
+  border-radius: $radius;
+  box-shadow: $shadow;
+  transition: $transition-all;
+
+  &:hover {
+    box-shadow: $shadow-lg;
+    transform: translateY(-2px);
+  }
+}
+
+// Button variants
+@mixin button-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: $button-padding-y $button-padding-x;
+  border: none;
+  border-radius: $border-radius-md;
+  font-weight: $font-weight-medium;
+  text-decoration: none;
+  cursor: pointer;
+  transition: $transition-colors;
+  font-family: $font-family-base;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+@mixin button-primary {
+  @include button-base;
+  background-color: $primary-blue;
+  color: $white;
+
+  &:hover:not(:disabled) {
+    background-color: color.adjust($primary-blue, $lightness: -10%);
+  }
+}
+
+@mixin button-secondary {
+  @include button-base;
+  background-color: $gray-200;
+  color: $gray-800;
+
+  &:hover:not(:disabled) {
+    background-color: $gray-300;
+  }
+}
+
+@mixin button-outline {
+  @include button-base;
+  background-color: transparent;
+  color: $primary-blue;
+  border: 2px solid $primary-blue;
+
+  &:hover:not(:disabled) {
+    background-color: $primary-blue;
+    color: $white;
+  }
+}
+
+// Loading spinner
+@mixin spinner($size: 40px, $color: $primary-blue) {
+  width: $size;
+  height: $size;
+  border: 3px solid rgba($color, 0.3);
+  border-radius: 50%;
+  border-top-color: $color;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Text utilities
+@mixin text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin text-truncate-lines($lines: 2) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// Focus states
+@mixin focus-ring($color: $primary-blue) {
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba($color, 0.3);
+  }
+}
+
+// Gradients
+@mixin portal-gradient {
+  background: linear-gradient(135deg, $portal-green 0%, $primary-green 50%, $space-purple 100%);
+}
+
+@mixin rick-morty-gradient {
+  background: linear-gradient(45deg, $rick-green 0%, $morty-yellow 100%);
+}
+
+// Animations
+@mixin fade-in($duration: 0.3s) {
+  animation: fadeIn $duration ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@mixin slide-up($duration: 0.3s) {
+  animation: slideUp $duration ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Character status badge
+@mixin status-badge($status) {
+  padding: $space-1 $space-2;
+  border-radius: $border-radius-full;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  text-transform: uppercase;
+
+  @if $status == "alive" {
+    background-color: rgba($success, 0.1);
+    color: $success;
+  } @else if $status == "dead" {
+    background-color: rgba($error, 0.1);
+    color: $error;
+  } @else {
+    background-color: rgba($gray-500, 0.1);
+    color: $gray-500;
+  }
+}
+
+// Container utilities
+@mixin container($max-width: $breakpoint-xl) {
+  width: 100%;
+  max-width: $max-width;
+  margin: 0 auto;
+  padding: 0 $space-4;
+
+  @include respond-to("tablet") {
+    padding: 0 $space-6;
+  }
+
+  @include respond-to("desktop") {
+    padding: 0 $space-8;
+  }
+}
