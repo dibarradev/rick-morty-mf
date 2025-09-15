@@ -28,7 +28,7 @@ export const useCharacters = () => {
    * Fetch characters with current filters and page
    */
   const fetchCharacters = useCallback(
-    async (page = 1, filterParams = filters) => {
+    async (page = 1, filterParams) => {
       setLoading(true);
       setError(null);
 
@@ -71,15 +71,23 @@ export const useCharacters = () => {
         setLoading(false);
       }
     },
-    [filters]
+    [] // Remove filters dependency to prevent unnecessary recreations
   );
 
   /**
    * Update filters and reset to first page
    */
-  const updateFilters = useCallback(newFilters => {
-    setFilters(prev => ({ ...prev, ...newFilters }));
-  }, []);
+  const updateFilters = useCallback(
+    newFilters => {
+      setFilters(prev => {
+        const updatedFilters = { ...prev, ...newFilters };
+        // Fetch with updated filters immediately, don't wait for state update
+        fetchCharacters(1, updatedFilters);
+        return updatedFilters;
+      });
+    },
+    [fetchCharacters]
+  );
 
   /**
    * Clear all filters
@@ -101,7 +109,7 @@ export const useCharacters = () => {
         fetchCharacters(page, filters);
       }
     },
-    [fetchCharacters, filters, pagination.pages]
+    [fetchCharacters, pagination.pages, filters]
   );
 
   /**
@@ -129,10 +137,11 @@ export const useCharacters = () => {
     fetchCharacters(pagination.page, filters);
   }, [fetchCharacters, pagination.page, filters]);
 
-  // Initial fetch and filter changes
+  // Initial fetch only - filters are now handled in updateFilters
   useEffect(() => {
     fetchCharacters(1, filters);
-  }, [fetchCharacters]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Only run on mount
 
   return {
     // Data

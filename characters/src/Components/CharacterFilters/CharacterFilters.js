@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import styles from './CharacterFilters.module.scss';
 
 /**
@@ -11,51 +11,95 @@ const CharacterFilters = ({
   onClearFilters,
   loading,
 }) => {
-  // Local state for immediate UI updates (debounced)
-  const [localFilters, setLocalFilters] = useState(filters);
+  // Local state for immediate UI updates (prevents focus loss)
+  const [localName, setLocalName] = useState(filters.name || '');
+  const [localSpecies, setLocalSpecies] = useState(filters.species || '');
+  const [localStatus, setLocalStatus] = useState(filters.status || '');
 
-  // Debounce effect for name filter
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (localFilters.name !== filters.name) {
-        onFiltersChange({ name: localFilters.name });
+  // Refs to store timeout IDs for cleanup
+  const nameTimeoutRef = useRef(null);
+  const speciesTimeoutRef = useRef(null);
+
+  // Handle name input change with debounce
+  const handleNameChange = useCallback(
+    value => {
+      setLocalName(value);
+
+      // Clear previous timeout
+      if (nameTimeoutRef.current) {
+        clearTimeout(nameTimeoutRef.current);
       }
-    }, 300);
 
-    return () => clearTimeout(timer);
-  }, [localFilters.name, filters.name, onFiltersChange]);
+      // Set new timeout
+      nameTimeoutRef.current = setTimeout(() => {
+        onFiltersChange({ name: value });
+      }, 500);
+    },
+    [onFiltersChange]
+  );
 
-  /**
-   * Handle input changes for immediate UI feedback
-   */
-  const handleInputChange = (field, value) => {
-    setLocalFilters(prev => ({ ...prev, [field]: value }));
+  // Handle species input change with debounce
+  const handleSpeciesChange = useCallback(
+    value => {
+      setLocalSpecies(value);
 
-    // For dropdowns, update immediately
-    if (field !== 'name') {
-      onFiltersChange({ [field]: value });
-    }
-  };
+      // Clear previous timeout
+      if (speciesTimeoutRef.current) {
+        clearTimeout(speciesTimeoutRef.current);
+      }
+
+      // Set new timeout
+      speciesTimeoutRef.current = setTimeout(() => {
+        onFiltersChange({ species: value });
+      }, 500);
+    },
+    [onFiltersChange]
+  );
+
+  // Handle status change (immediate)
+  const handleStatusChange = useCallback(
+    value => {
+      setLocalStatus(value);
+      onFiltersChange({ status: value });
+    },
+    [onFiltersChange]
+  );
 
   /**
    * Handle clear filters
    */
-  const handleClearFilters = () => {
-    setLocalFilters({ name: '', status: '', species: '' });
+  const handleClearFilters = useCallback(() => {
+    setLocalName('');
+    setLocalSpecies('');
+    setLocalStatus('');
     onClearFilters();
-  };
+  }, [onClearFilters]);
 
   /**
    * Check if any filters are active
    */
-  const hasActiveFilters = Object.values(filters).some(
-    value => value && value.trim()
-  );
+  const hasActiveFilters = localName || localStatus || localSpecies;
 
-  // Sync local state when filters change externally
+  // Sync local state only when filters are cleared externally
   useEffect(() => {
-    setLocalFilters(filters);
+    if (!filters.name && !filters.status && !filters.species) {
+      setLocalName('');
+      setLocalSpecies('');
+      setLocalStatus('');
+    }
   }, [filters]);
+
+  // Cleanup timeouts on unmount
+  useEffect(() => {
+    return () => {
+      if (nameTimeoutRef.current) {
+        clearTimeout(nameTimeoutRef.current);
+      }
+      if (speciesTimeoutRef.current) {
+        clearTimeout(speciesTimeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div className={styles.filtersContainer}>
@@ -73,8 +117,8 @@ const CharacterFilters = ({
                   type='text'
                   className='form-control'
                   placeholder='Enter character name...'
-                  value={localFilters.name}
-                  onChange={e => handleInputChange('name', e.target.value)}
+                  value={localName}
+                  onChange={e => handleNameChange(e.target.value)}
                   disabled={loading}
                   aria-describedby='name-filter-help'
                 />
@@ -96,8 +140,8 @@ const CharacterFilters = ({
               <select
                 id='status-filter'
                 className='form-select'
-                value={localFilters.status}
-                onChange={e => handleInputChange('status', e.target.value)}
+                value={localStatus}
+                onChange={e => handleStatusChange(e.target.value)}
                 disabled={loading}
                 aria-describedby='status-filter-help'
               >
@@ -124,8 +168,8 @@ const CharacterFilters = ({
                 type='text'
                 className='form-control'
                 placeholder='e.g., Human, Alien...'
-                value={localFilters.species}
-                onChange={e => handleInputChange('species', e.target.value)}
+                value={localSpecies}
+                onChange={e => handleSpeciesChange(e.target.value)}
                 disabled={loading}
                 aria-describedby='species-filter-help'
               />
@@ -167,11 +211,14 @@ const CharacterFilters = ({
             <div className={styles.activeFilters}>
               <h6 className={styles.activeFiltersTitle}>Active Filters:</h6>
               <div className={styles.filterTags}>
-                {filters.name && (
+                {localName && (
                   <span className={styles.filterTag}>
-                    Name: "{filters.name}"
+                    Name: "{localName}"
                     <button
-                      onClick={() => onFiltersChange({ name: '' })}
+                      onClick={() => {
+                        setLocalName('');
+                        onFiltersChange({ name: '' });
+                      }}
                       className={styles.removeTag}
                       aria-label='Remove name filter'
                     >
@@ -179,11 +226,14 @@ const CharacterFilters = ({
                     </button>
                   </span>
                 )}
-                {filters.status && (
+                {localStatus && (
                   <span className={styles.filterTag}>
-                    Status: {filters.status}
+                    Status: {localStatus}
                     <button
-                      onClick={() => onFiltersChange({ status: '' })}
+                      onClick={() => {
+                        setLocalStatus('');
+                        onFiltersChange({ status: '' });
+                      }}
                       className={styles.removeTag}
                       aria-label='Remove status filter'
                     >
@@ -191,11 +241,14 @@ const CharacterFilters = ({
                     </button>
                   </span>
                 )}
-                {filters.species && (
+                {localSpecies && (
                   <span className={styles.filterTag}>
-                    Species: {filters.species}
+                    Species: {localSpecies}
                     <button
-                      onClick={() => onFiltersChange({ species: '' })}
+                      onClick={() => {
+                        setLocalSpecies('');
+                        onFiltersChange({ species: '' });
+                      }}
                       className={styles.removeTag}
                       aria-label='Remove species filter'
                     >
