@@ -1,6 +1,6 @@
 // Import shared variables and mixins using modern @use syntax
-@use "../../../_variables" as *;
-@use "../../../_mixins" as *;
+@use "../../_variables" as *;
+@use "../../_mixins" as *;
 
 /* Global styles for the shell application using SCSS variables and mixins */
 :root {

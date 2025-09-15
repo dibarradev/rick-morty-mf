@@ -3,14 +3,18 @@ FROM node:18-alpine AS build
 
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
+# Copy package files from shell directory
+COPY shell/package*.json ./
 
 # Install dependencies
-RUN npm ci --only=production
+RUN npm install
 
-# Copy source code
-COPY . .
+# Copy shared variables and mixins from root
+COPY _variables.scss ./
+COPY _mixins.scss ./
+
+# Copy source code from shell directory  
+COPY shell/ .
 
 # Build the application
 RUN npm run build
@@ -19,7 +23,7 @@ RUN npm run build
 FROM nginx:alpine
 
 # Copy custom nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY shell/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy built application
 COPY --from=build /app/dist /usr/share/nginx/html
